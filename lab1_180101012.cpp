@@ -119,6 +119,7 @@ string diff(string a,string b)
     if(a[i]>='0'){pos=i;break;}
     else
     {
+      s+='9';
       a[i]='9';
       a[i+1]--;
     }
@@ -183,8 +184,8 @@ bool is_prime(lli x)
 int main() 
 { 
   fastio;
-  //string a,b;cin>>a>>b;
-  //cout<<diff(a,b);
-  cout<<is_prime(1);
+  string a,b;cin>>a>>b;
+  cout<<diff(a,b);
+
   return 0;     
 }

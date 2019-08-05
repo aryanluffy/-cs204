@@ -60,17 +60,18 @@ int DelFirst(point **root)
 }
 int Del(int x,int y,point **root)
 {
-    if((*root)->x==x && (*root)->y==y)
+	point *temp2=*root;
+    if(temp2->x==x && temp2->y==y)
     {
       DelFirst(root);
       return 0;
     }
-    while((*root)->link!=NULL)
+    while(temp2->link!=NULL)
     {
-      if((*root)->link->x==x && (*root)->link->y==y)
+      if(temp2->link->x==x && temp2->link->y==y)
       {
-          point *temp=(*root)->link;
-          *root=((*root)->link)->link;
+          point *temp=temp2->link;
+          temp2=(temp2->link)->link;
           free(temp);
           return 0;
       } 
@@ -103,7 +104,7 @@ string arr[]={"FALSE","TRUE"};
 int main() 
 { 
   fastio;
-  lli t;cin>>t;
+  int t;cin>>t;
   point *X;
   point **root=&X;
   *root=NULL;

@@ -71,10 +71,12 @@ int Del(int x,int y,point **root)
       if(temp2->link->x==x && temp2->link->y==y)
       {
           point *temp=temp2->link;
-          temp2=(temp2->link)->link;
+          temp2->link=(temp2->link)->link;
           free(temp);
           return 0;
-      } 
+      }
+      else
+      temp2=temp2->link;
     }
     return -1;
 }
@@ -99,6 +101,11 @@ void Search(ld d,point *root)
     root=root->link;
    }
    cout<<"\n";
+}
+void Show(point *root)
+{
+	while(root!=NULL){cout<<root->x<<root->y<<" ";root=root->link;}
+	cout<<"\n";
 }
 string arr[]={"FALSE","TRUE"};
 int main() 
@@ -141,5 +148,6 @@ int main()
       cout<<Length(*root)<<"\n";
     }
   }
+  //Show(*root);
   return 0;     
 }

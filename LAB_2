@@ -38,10 +38,6 @@ void AddFirst(int x,int y,point **root)
 {
    point *temp=(point *)malloc(sizeof(point));
    temp->x=x,temp->y=y;
-   /*if(root==NULL){
-    *root=temp;
-    return;
-   }*/
    if(*root!=NULL)
    {
       temp->link=*root;
@@ -61,6 +57,9 @@ int DelFirst(point **root)
 int Del(int x,int y,point **root)
 {
 	point *temp2=*root;
+	if(temp2==NULL){
+		return -1;
+	}
     if(temp2->x==x && temp2->y==y)
     {
       DelFirst(root);
@@ -112,9 +111,8 @@ int main()
 { 
   fastio;
   int t;cin>>t;
-  point *X;
+  point *X=NULL;
   point **root=&X;
-  *root=NULL;
   while(t!=0)
   {
     t--;

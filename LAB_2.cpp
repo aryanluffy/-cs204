@@ -91,22 +91,20 @@ bool Search(int x,int y,point *root)
 }
 void Search(ld d,point *root)
 {
+   int cnt=0;
    while(root!=NULL)
    {
-    if((root->x)*(root->x)+ (root->y)*(root->y)<=d*d)
-    {
-      cout<<"("<<root->x<<","<<root->y<<")";
-    }
+    if((root->x)*(root->x)+ (root->y)*(root->y)<=d*d) cnt++;
     root=root->link;
    }
-   cout<<"\n";
+   cout<<cnt<<"\n";
 }
 void Show(point *root)
 {
 	while(root!=NULL){cout<<root->x<<root->y<<" ";root=root->link;}
 	cout<<"\n";
 }
-string arr[]={"FALSE","TRUE"};
+string arr[]={"False","True"};
 int main() 
 { 
   fastio;
@@ -124,12 +122,14 @@ int main()
     }
     else if(x==2)
     {
-      cout<<DelFirst(root)<<"\n";
+      int temp=DelFirst(root);
+      if(temp)cout<<temp<<"\n";
     }
     else if(x==3)
     {
       int y,z;cin>>y>>z;
-      cout<<Del(y,z,root)<<"\n";
+      int temp=Del(y,z,root);
+      if(temp)cout<<temp<<"\n";
     }
     else if(x==4)
     {

@@ -34,11 +34,13 @@ vector<string> stringTovector(string s)
         if((s[i] >= '0' && s[i] <= '9')) 
         {
             int j = i;
-            for(;(s[j] >= '0' && s[j] <= '9');j++)
+            while(i!=s.size() && s[i] >= '0' && s[i] <= '9')
             {
-                temp+=s[j];
+                temp+=s[i];
+                i++;
             }
-            i = j-1;
+            
+            i--;
         }
         else 
         {

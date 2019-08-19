@@ -116,6 +116,31 @@ struct node
   string s;
   node* lch=NULL,*rch=NULL;
 };
+lli evaluate(node *root)
+{
+   string s=root->s;
+   lli ans=0;
+   if(s!="+" && s!="-" && s!="*" && s!="/" && s!="^")
+   return stoi(s);
+   else
+   {
+     int lans=evaluate(root->lch),rans=evaluate(root->rch);
+     if(s=="+")
+       ans=lans+rans;
+     else if(s=="-")
+       ans=lans-rans;
+     else if(s=="*")
+       ans=lans*rans;
+     else if(s=="/")
+       ans=lans/rans;
+     else
+     {
+       ans=1;
+       f(i,0,rans)ans*=lans;
+     }
+   }
+   return ans;
+}
 node* construct_tree(vt <string> postfix)
 {
    node *root=NULL;
@@ -149,31 +174,7 @@ node* construct_tree(vt <string> postfix)
    if(stk.size()!=1)return NULL;
    return stk.back();
 }
-lli evaluate(node *root)
-{
-   string s=root->s;
-   lli ans=0;
-   if(s!="+" && s!="-" && s!="*" && s!="/" && s!="^")
-   return stoi(s);
-   else
-   {
-     int lans=evaluate(root->lch),rans=evaluate(root->rch);
-     if(s=="+")
-       ans=lans+rans;
-     else if(s=="-")
-       ans=lans-rans;
-     else if(s=="*")
-       ans=lans*rans;
-     else if(s=="/")
-       ans=lans/rans;
-     else
-     {
-       ans=1;
-       f(i,0,rans)ans*=lans;
-     }
-   }
-   return ans;
-}
+
 int main() 
 { 
   fastio;

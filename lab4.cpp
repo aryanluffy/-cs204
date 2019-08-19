@@ -92,6 +92,7 @@ vector<string> infixToPostfix(vector<string> s)
         else{ 
             while(st.top() != "N" && prec(s[i]) <= prec(st.top())) 
             { 
+                if(s[i]=="^"&&st.top()=="^") break;
                 string c = st.top(); 
                 st.pop(); 
                 ns.push_back(c); 

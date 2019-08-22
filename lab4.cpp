@@ -39,22 +39,21 @@ vector<string> stringTovector(string s)
                 temp+=s[i];
                 i++;
             }
-            
             i--;
         }
         else 
         {
             temp+=s[i];
         }
-        stv.push_back(temp);
-
+        stv.pb(temp);
     }
-
     return stv;
 }
 int prec(string c) 
 { 
-    if(c == "^") 
+    if(c=="#")
+      return 4;
+    else if(c == "^") 
     return 3; 
     else if(c == "*" || c == "/") 
     return 2; 
@@ -106,10 +105,8 @@ vector<string> infixToPostfix(vector<string> s)
         string c = st.top(); 
         st.pop(); 
         ns.push_back(c); 
-    } 
-      
+    }     
     return ns;
-  
 } 
 
 struct node
@@ -120,12 +117,14 @@ struct node
 lli evaluate(node *root)
 {
    string s=root->s;
+   //cout<<s<<"\n";
    lli ans=0;
-   if(s!="+" && s!="-" && s!="*" && s!="/" && s!="^")
+   if(s!="+" && s!="-" && s!="*" && s!="/" && s!="^" && s!="#")
    return stoi(s);
    else
    {
-     int lans=evaluate(root->lch),rans=evaluate(root->rch);
+     lli lans=evaluate(root->lch),rans=0;
+     if(root->rch!=NULL)rans=evaluate(root->rch);
      if(s=="+")
        ans=lans+rans;
      else if(s=="-")
@@ -134,11 +133,17 @@ lli evaluate(node *root)
        ans=lans*rans;
      else if(s=="/")
        ans=lans/rans;
-     else
+     else if(s=="^")
      {
        ans=1;
+       if(rans<0)ans=0;
        f(i,0,rans)ans*=lans;
      }
+     else
+     {
+       ans=-evaluate(root->lch);
+     }
+     
    }
    return ans;
 }
@@ -149,7 +154,7 @@ node* construct_tree(vt <string> postfix)
    int i=0;
    while(i!=postfix.size())
    {
-     if(postfix[i]!="+" && postfix[i]!="-" && postfix[i]!="*" && postfix[i]!="/" && postfix[i]!="^")
+     if(postfix[i]!="+" && postfix[i]!="-" && postfix[i]!="*" && postfix[i]!="/" && postfix[i]!="^" && postfix[i]!="#")
        {
          node *temp=(node *)malloc(sizeof(node));
          temp->s=postfix[i];
@@ -157,7 +162,7 @@ node* construct_tree(vt <string> postfix)
          if(postfix[i][j]<'0' || postfix[i][j]>'9')return NULL;
          stk.pb(temp);
        } 
-     else
+     else if(postfix[i]!="#")
      {
        if(stk.size()<2)return NULL;
        node *s1=stk.back();
@@ -169,6 +174,16 @@ node* construct_tree(vt <string> postfix)
        temp->lch=s2;
        temp->rch=s1;
        stk.pb(temp); 
+     }
+     else
+     {
+       if(stk.size()<1)return NULL;
+       node *s1=stk.back();
+       stk.pop_back();
+       node *temp=(node *)malloc(sizeof(node));
+       temp->lch=s1;
+       temp->s="#";
+       stk.pb(temp);
      }
      i++;
    }
@@ -185,8 +200,21 @@ int main()
     int n;cin>>n;
     f(i,0,n)
     {
-      string s;cin>>s;
-      vt <string> postfix=stringTovector(s);
+      string s,s1;
+      cin>>s;
+     f(i,0,s.size())
+      {
+        if(s[i]=='-')
+        {
+          if(i==0||s[i-1]=='('|| s[i-1]=='+'||s[i-1]=='-'||s[i-1]=='^'||s[i-1]=='*'||s[i-1]=='/')
+          {
+            s1.push_back('#');
+            continue;
+          }
+        }
+        s1.push_back(s[i]);
+      }
+      vt <string> postfix=stringTovector(s1);
       postfix=infixToPostfix(postfix);
       node* root=construct_tree(postfix);
       if(root!=NULL)

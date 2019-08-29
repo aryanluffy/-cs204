@@ -1,3 +1,8 @@
+//The MAP2, MAP3 and MAP4 are mere arrays. The approach works in O(nlogn) time. 
+//First store all the variables in MAP2 and all the querries in queries.
+//Then sort MAP2.
+//MAP3 is the array obtained by deleting duplicates in MAP2.
+//MAP4 is the array which contains the current values for a query for the variable at the ith position in the MAP3.
 #include <bits/stdc++.h>
 #define lli long long int
 #define pb push_back
@@ -23,7 +28,6 @@
 #define p_q priority_queue 
 #define min_p_q priority_queue <int,vt <int>,greater <int>>
 using namespace std;
-map <string,string> MAP;
 vector<string> stringTovector(string s)
 {
     int n = s.length();
@@ -115,19 +119,21 @@ struct node
   string s;
   node* lch=NULL,*rch=NULL;
 };
-lli evaluate(node *root)
+lli evaluate(node *root,vt <string> &MAP3,vt <string> &MAP4)
 {
    string s=root->s;
    lli ans=0;
    if(s!="+" && s!="-" && s!="*" && s!="/" && s!="^" && s!="#")
    {
-     if(MAP.find(s)==MAP.end())return stoi(s);
-     return stoi(MAP[s]);
+     int pos=lb(MAP3.begin(),MAP3.end(),s)-MAP3.begin();
+     if(pos==MAP3.size())return stoi(s);
+     if(MAP3[pos]!=s)return stoi(s);
+     return stoi(MAP4[pos]);
    }
    else
    {
-     lli lans=evaluate(root->lch),rans=0;
-     if(root->rch!=NULL)rans=evaluate(root->rch);
+     lli lans=evaluate(root->lch,MAP3,MAP4),rans=0;
+     if(root->rch!=NULL)rans=evaluate(root->rch,MAP3,MAP4);
      if(s=="+")
        ans=lans+rans;
      else if(s=="-")
@@ -144,13 +150,13 @@ lli evaluate(node *root)
      }
      else
      {
-       ans=-evaluate(root->lch);
+       ans=-evaluate(root->lch,MAP3,MAP4);
      }
      
    }
    return ans;
 }
-node* construct_tree(vt <string> postfix)
+node* construct_tree(vt <string> &postfix,vt <string> &MAP3,vt <string> &MAP4)
 {
    node *root=NULL;
    vt <node*> stk;
@@ -160,8 +166,28 @@ node* construct_tree(vt <string> postfix)
      if(postfix[i]!="+" && postfix[i]!="-" && postfix[i]!="*" && postfix[i]!="/" && postfix[i]!="^" && postfix[i]!="#")
        {
          node *temp=(node *)malloc(sizeof(node));
-         temp->s=postfix[i];
-         stk.pb(temp);
+         if(isalpha(postfix[i][0]))
+         {
+           int pos=lb(MAP3.begin(),MAP3.end(),postfix[i])-MAP3.begin();
+           if(pos==MAP3.size())return NULL;
+           if(MAP3[pos]!=postfix[i])
+              return NULL;
+           else
+           {
+             if(MAP4[pos]=="")
+               return NULL;
+             else
+             {
+               temp->s=postfix[i];
+               stk.pb(temp);
+             } 
+           }
+         }
+         else
+         {
+           temp->s=postfix[i];
+           stk.pb(temp);
+         }
        } 
      else if(postfix[i]!="#")
      {
@@ -198,6 +224,8 @@ void traverse(node *root)
   traverse(root->lch);
   traverse(root->rch);
 }
+
+
 int main() 
 { 
   //fastio;
@@ -205,6 +233,8 @@ int main()
   while(t--)
   {
     int n;cin>>n;
+    vt <string> MAP2;
+    vt <pair<vt <string>,string>> queries(n);
     f(k,0,n)
     {
       string s,s1;
@@ -222,7 +252,7 @@ int main()
       {
         if(s[i]=='-')
         {
-          if(i==0||s[i-1]=='('|| s[i-1]=='+'||s[i-1]=='-'||s[i-1]=='^'||s[i-1]=='*'||s[i-1]=='/')
+          if(i==j||s[i-1]=='('|| s[i-1]=='+'||s[i-1]=='-'||s[i-1]=='^'||s[i-1]=='*'||s[i-1]=='/')
           {
             s1.push_back('#');
             continue;
@@ -230,34 +260,43 @@ int main()
         }
         s1.push_back(s[i]);
       }
+      //cout<<s1<<"\n";
       vt <string> postfix=stringTovector(s1);
       postfix=infixToPostfix(postfix);
-      node* root=construct_tree(postfix);
-      int f2=0;
-      f(y,0,postfix.size())if(isalpha(postfix[y][0])){
-        if(MAP.find(postfix[y])==MAP.end())
-          f2=1;
+      queries[k].first=postfix;
+      queries[k].second=temp;
+      if(j)
+      {
+        MAP2.pb(temp);
       }
-      if(flag){
-        if(MAP.find(temp)==MAP.end())
-        MAP.ist({temp,"70"});
-        if(!f2)
-        MAP[temp]=to_string(evaluate(root));
-        else
-        {
-          MAP.erase(temp); 
-        }
-        continue;
-      } 
-      if(f2){
-        cout<<"CANT BE EVALUATED\n";
-        continue;
-      }
-      if(root!=NULL)
-      cout<<evaluate(root)<<"\n";
-      else cout<<"CANT BE EVALUATED\n";
     }
-    MAP.clear();
+    sort(MAP2.begin(),MAP2.end());
+    vt <string> MAP3;
+    for(int i=0;i<(int)MAP2.size()-1;i++)
+    {
+      if(MAP2[i]!=MAP2[i+1])
+        MAP3.pb(MAP2[i]);
+    }
+    if(MAP2.size()>0)
+    MAP3.pb(MAP2.back());
+    vt <string> MAP4(MAP3.size(),"");
+    f(k,0,n)
+    {
+      if(queries[k].second=="")
+      {
+        node *root=construct_tree(queries[k].first,MAP3,MAP4);
+        if(root==NULL)
+            cout<<"CAN'T BE EVALUATED\n";
+        else
+            cout<<evaluate(root,MAP3,MAP4)<<"\n";  
+      }
+      else
+      {
+        int pos=lb(MAP3.begin(),MAP3.end(),queries[k].second)-MAP3.begin();
+        node *root=construct_tree(queries[k].first,MAP3,MAP4);
+        if(root!=NULL)MAP4[pos]=to_string(evaluate(root,MAP3,MAP4));
+      }
+    }
   }
   return 0; 	
 }

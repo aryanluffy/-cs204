@@ -69,7 +69,7 @@ int prec(string c)
 vector<string> infixToPostfix(vector<string> s) 
 { 
     stack<string> st; 
-    st.push("N"); 
+    st.push("@"); 
     int l = s.size(); 
     vector<string> ns;
     for(int i = 0; i < l; i++) 
@@ -81,20 +81,17 @@ vector<string> infixToPostfix(vector<string> s)
            st.push("("); 
         else if(s[i] == ")") 
         { 
-            while(st.top() != "N" && st.top() != "(") 
+            while(st.top() != "@" && st.top() != "(") 
             { 
                 string c = st.top(); 
                 st.pop(); 
                 ns.push_back(c);
             } 
             if(st.top() == "(") 
-            { 
-                string c = st.top(); 
-                st.pop(); 
-            } 
+            st.pop();  
         } 
         else{ 
-            while(st.top() != "N" && prec(s[i]) <= prec(st.top())) 
+            while(st.top() != "@" && (prec(s[i]) <= prec(st.top())) && s[i]!="#" ) 
             { 
                 if(s[i]=="^"&&st.top()=="^") break;
                 string c = st.top(); 
@@ -103,9 +100,8 @@ vector<string> infixToPostfix(vector<string> s)
             } 
             st.push(s[i]); 
         } 
-  
     } 
-    while(st.top() != "N") 
+    while(st.top() != "@") 
     { 
         string c = st.top(); 
         st.pop(); 
@@ -260,7 +256,6 @@ int main()
         }
         s1.push_back(s[i]);
       }
-      //cout<<s1<<"\n";
       vt <string> postfix=stringTovector(s1);
       postfix=infixToPostfix(postfix);
       queries[k].first=postfix;

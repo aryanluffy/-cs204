@@ -240,7 +240,7 @@ int main()
       }
       if(flag){
         if(MAP.find(temp)==MAP.end())
-        MAP.ist({temp,"69"});
+        MAP.ist({temp,"70"});
         if(!f2)
         MAP[temp]=to_string(evaluate(root));
         else

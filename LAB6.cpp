@@ -26,28 +26,55 @@
 #define min_p_q priority_queue <int,vt <int>,greater <int>>
 using namespace std;
 using namespace __gnu_pbds; 
-lli userval[1000001];
+lli tmod(lli x,lli m){return (x%m+m)%m;}//USE AT YOUR OWN RISK
+v64 userid,distuserid,val;
+v4096 queries; 
 int main() 
 { 
-  //fastio;
-  int n,q;cin>>n>>q;
-  int maxid=0;
-  while(q--)
+  fastio;
+  lli n,q;cin>>n>>q;
+  queries.resize(q);
+  f(i,0,q)
   {
-    int t;cin>>t;
-    if(t==1)
+     int t;
+     cin>>t;
+     if(t==1)
+     {
+       lli u,a;cin>>u>>a;
+       queries[i].pb(1),queries[i].pb(u),queries[i].pb(a);
+       userid.pb(u);
+     }
+     else queries[i].pb(2);
+  }
+  sort(userid.begin(),userid.end());
+  for(int i=0;i<(int)userid.size()-1;i++)
     {
-      lli u,a;cin>>u>>a;
-      userval[u]+=a;
-      if(userval[u]>userval[maxid])
-         maxid=u;
+      if(userid[i]!=userid[i+1])
+        distuserid.pb(userid[i]);
+    }
+    if(userid.size()>0)
+    distuserid.pb(userid.back());
+    val.resize(distuserid.size());
+    f(i,0,val.size())val[i]=0;
+  int maxid=0;  
+  f(i,0,queries.size())
+  {
+    if(queries[i][0]==1)
+    {
+      int pos=lb(distuserid.begin(),distuserid.end(),queries[i][1])-distuserid.begin();
+      val[pos]+=queries[i][2];
+      if(maxid==0)
+          maxid=queries[i][1];
+      else {
+        int pos2=lb(distuserid.begin(),distuserid.end(),maxid)-distuserid.begin();
+        if(val[pos2]<val[pos])
+          maxid=queries[i][1];
+      }  
     }
     else
     {
-      if(userval[maxid]==0)
-      cout<<"No data available.\n";
-      else
-      cout<<maxid<<"\n";
+      if(maxid==0)cout<<"No data available.\n";
+      else cout<<maxid<<"\n";
     }
   }
   return 0; 	

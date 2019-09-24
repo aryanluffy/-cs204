@@ -29,55 +29,51 @@
 #define min_p_q priority_queue<int, vt<int>, greater<int>>
 using namespace std;
 using namespace __gnu_pbds;
-ld solve(vt<ld> dist, lli k)
+lli solve(v64 dist, lli k)
 {
-  vt<ld> newdist;
-  f(i, 0, dist.size() / 5)
+  if(dist.size()==1)return dist[0];
+  vt<lli> newdist;
+  int ZXC=dist.size()/5;
+  f(i, 0, ZXC)
   {
     sort(dist.begin() + i * 5, dist.begin() + i * 5 + 5);
     newdist.pb(dist[5 * i + 2]);
   }
-  vt<ld> temp;
-  f(i, 5 * (dist.size() / 5), dist.size())
-  {
-    temp.pb(dist[i]);
-  }
+  vt<lli> temp;
+  f(i, 5 * ZXC, dist.size()) temp.pb(dist[i]);
   sort(temp.begin(), temp.end());
   if(temp.size()>0)
-  newdist.pb(temp[temp.size() / 2]);
-  
-  ld median_of_medians ;
+  newdist.pb(temp[(temp.size()-1) / 2]);
+  lli median_of_medians ;
   if(newdist.size()!=1)
-  median_of_medians= solve(newdist, newdist.size() / 2);
+  median_of_medians= solve(newdist, (newdist.size()-1) / 2);
   else median_of_medians=newdist[0];
   int pos = -1;
   f(i, 0, dist.size()) if (median_of_medians == dist[i]) pos = i;
-  swap(dist[pos], dist.back());
+  swap(dist[pos], dist[dist.size()-1]);
   int i = -1;
-  int low = 0, high = (int)dist.size() - 1;
+  int low = 0, high = dist.size() - 1;
   for (int j = low; j <= high - 1; j++)
   {
-    if (dist[j] < dist.back())
+    if (dist[j] <= dist.back())
     {
       i++;
       swap(dist[i], dist[j]);
     }
   }
   swap(dist[i + 1], dist[high]);
-  //cout<<i+1<<"\n";
-  //cout<<k<<"\n";
   if (i + 1 == k)
     return dist[i + 1];
   else if (i + 1 > k)
   {
-    vt<ld> DIST;
+    vt<lli> DIST;
     f(j, 0, i + 1) DIST.pb(dist[j]);
     return solve(DIST, k);
   }
   else
   {
-    vt<ld> DIST;
-    f(j, i + 2, k+1) DIST.pb(dist[j]);
+    vt<lli> DIST;
+    f(j, i + 2, dist.size()) DIST.pb(dist[j]);
     return solve(DIST, k - i - 2);
   }
   return 0;
@@ -91,11 +87,11 @@ int main()
   {
     int k;
     cin >> k;
-    vt<pair<ld, ld>> pnt(k);
+    vt<pair<lli, lli>> pnt(k);
     f(i, 0, k) cin >> pnt[i].first >> pnt[i].second;
-    vt<ld> dist(k);
+    vt<lli> dist(k);
     f(i, 0, k) dist[i] = (pnt[i].first * pnt[i].first + pnt[i].second * pnt[i].second);
-    cout << sqrt(solve(dist, (k - 1) / 2)) << "\n";
+    cout << setprecision(19)<<sqrt(solve(dist, (k - 1) / 2)) << "\n";
   }
   return 0;
 }

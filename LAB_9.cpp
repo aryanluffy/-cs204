@@ -81,7 +81,7 @@ int main()
   }
   newarr.pb(pnts.back());
   if(newarr.size()<3){
-    //cout<<-1;
+    cout<<0;
     return 0;
   }
   vt <Point> STACK;

@@ -92,7 +92,7 @@ int main()
   f(i,3,newarr.size()){
         Point p2=STACK.back();
         Point p1=STACK[STACK.size()-2];
-    while(orientation(p1,p2,newarr[i])==1){STACK.pop_back();
+    while(orientation(p1,p2,newarr[i])==1 || orientation(p1,p2,newarr[i])==0){STACK.pop_back();
         p2=STACK.back();
         p1=STACK[STACK.size()-2];
     };

@@ -37,7 +37,6 @@ int dx[]={1,-1,0,0};
 int dy[]={0,0,1,-1};
 
 v32 graph[1000001],MARK(1000001,0);
-
 void dfs(int u,int clr){
   for(auto x:graph[u]){
     if(MARK[x]==0){
@@ -60,7 +59,6 @@ int main()
     pnts.ist({{x,y},i});
     mark.ist({{x,y},0});
   }
-  f(i,0,k)MARK[i]=0;
   map <pair<lli,lli>,lli>::iterator itr=pnts.begin();
   while(itr!=pnts.end()){
     lli x=itr->first.first,y=itr->first.second;
@@ -71,10 +69,9 @@ int main()
       if(pnts.find({nx,ny})!=pnts.end() && mark[{nx,ny}]==0){
         graph[pnts[{nx,ny}]].pb(pnts[{x,y}]);
         graph[pnts[{x,y}]].pb(pnts[{nx,ny}]);
-        mark[{nx,ny}]=1;
       }
-      mark[{x,y}]=1;
     }
+	mark[{x,y}]=1;
     itr++;
   }
   int counter=1;
@@ -87,7 +84,7 @@ int main()
   }
   int ans[k]={0};
   f(i,0,k)ans[MARK[i]]++;
-  int ANS=*max_element(MARK.begin(),MARK.end());
+  int ANS=*max_element(ans,ans+k);
   cout<<ANS<<"\n";
   return 0; 	
 }

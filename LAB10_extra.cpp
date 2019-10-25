@@ -1,3 +1,4 @@
+  
 #include <bits/stdc++.h>
 #define lli long long int
 #define pb push_back
@@ -79,7 +80,7 @@ int main()
     }
     for (auto it : input)
     {
-        if (!vis[it])
+        if (!is_it_visited[it])
         {
             c = 0;
             dfs(it);

@@ -74,10 +74,10 @@ int main()
   int count=0;
   f(i,0,m){
     if(!DSU.isSameSet(EDGES[i].second.first,EDGES[i].second.second)){
-      ans*=EDGES[i].first;
+      ans=(ans*EDGES[i].first)%mod;
       DSU.unionSet(EDGES[i].second.first,EDGES[i].second.second);
     }
   }
-  cout<<ans<<"\n";
+  cout<<(ans%mod+mod)%mod<<"\n";
   return 0; 	
 }

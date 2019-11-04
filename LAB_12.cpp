@@ -70,7 +70,7 @@ int main()
   }
   sort(EDGES.rbegin(),EDGES.rend());
   UnionFind DSU(n+1);
-  ld ans=0;
+  lli ans=1;
   int count=0;
   f(i,0,m){
     if(!DSU.isSameSet(EDGES[i].second.first,EDGES[i].second.second)){

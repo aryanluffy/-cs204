@@ -74,7 +74,7 @@ int main()
   int count=0;
   f(i,0,m){
     if(!DSU.isSameSet(EDGES[i].second.first,EDGES[i].second.second)){
-      ans=(ans*EDGES[i].first)%mod;
+      ans=(ans*(EDGES[i].first)%mod)%mod;
       DSU.unionSet(EDGES[i].second.first,EDGES[i].second.second);
     }
   }

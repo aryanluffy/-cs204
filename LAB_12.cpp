@@ -58,14 +58,14 @@ class UnionFind //rank is equal to number of vertices in a connected component
   }   
 };
 
-vt <pair<ld,pair<int,int>>> EDGES;
+vt <pair<lli,pair<int,int>>> EDGES;
 int main() 
 { 
   fastio;
   int n,m;cin>>n>>m;
   f(i,0,m){
     int x,y;cin>>x>>y;
-    ld z;cin>>z;
+    lli z;cin>>z;
     EDGES.pb({z,{x,y}});
   }
   sort(EDGES.rbegin(),EDGES.rend());

@@ -64,7 +64,7 @@ class UnionFind //rank is equal to number of vertices in a connected component
   } 
  
   }   
-}
+};
 vt <pair<lli,pair<int,int>>> EDGES;
 lli MST_WEIGHT(int n){
     lli ans=0;

@@ -1,73 +1,142 @@
 #include <bits/stdc++.h>
-#define lli long long int
-#define pb push_back
-#define mod 1000000007
-#pragma GCC optimize ("-O2")
-#define mod2 998244353
-#define MAXN 1000000000
-#define v32 vector<int>
-#define v64 vector<lli>
-#define v1024 vector <vector <int>>
-#define v4096 vector <vector <lli>>
-#define vt vector
-#define f(x, y, z) for (lli x = y; x < z; x++)
-#define fd(x, y, z) for (lli x = y; x > z; x--)
-#define lb lower_bound
-#define ld long double
-#define m64 map<lli,lli>
-#define m32 map<int,int>
-#define m64it map<lli,lli>::iterator
-#define m32it map<int,int>::iterator
-#define fastio ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
-#define ist insert
-#define p_q priority_queue 
-#define min_p_q priority_queue <int,vt <int>,greater <int>>
 using namespace std;
-char arr[256];
-int main() 
+// 10 ^ 8
+#define fi(nn) for(int i = 0;i<nn;i++)
+#define fir(nn) for(int i = nn-1;i>=0;i--)
+#define fi1(nn,aa) for(int i = 0; i< nn; i+=aa)
+#define fir1(nn,en) for(int i = nn-1;i>=en;i--)
+#define fi2(init,nn,aa) for(int i = init; i< nn; i+=aa)
+#define fir2(nn,en,aa) for(int i = nn-1;i>=en;i-=aa)
+#define fj(nn) for(int j = 0;j<nn;j++)
+#define fj1(nn,aa) for(int j = 0; j< nn; j+=aa)
+#define fj2(init,nn,aa) for(int j = init; j< nn; j+=aa)
+#define lli long long int  
+#define line cout<<endl;
+#define vc vector<char>
+#define vi vector<int>
+#define vlli vector<lli>
+// function to check if paranthesis are balanced 
+
+bool ParanthesisBalanced(string a) 
 { 
-  fastio;
-  f(i,0,256)arr[i]=-1;
-  arr['(']=0;arr['{']=1;arr['[']=2;arr['<']=3;arr['|']=4;arr[')']=5;arr['}']=6;arr[']']=7;arr['>']=8;
-  int n;cin>>n;
-  while(n--)
-  {
-    string s;cin>>s;
-    vt <char> stk;
-    int flag=true;
-    f(i,0,s.size())
-    {
-       if(arr[s[i]]==-1){
-         flag=false;
-         break;
-       }
-       if(arr[s[i]]<4)
-         stk.pb(s[i]);
-       else if(arr[s[i]]>4)
-         {
-           if(stk.size()==0)
-             {
-               flag=false;
-               break;
-             }
-            else {
-              if(arr[stk[stk.size()-1]]==arr[s[i]]-5)
-                  stk.pop_back();
-              else {
-                 flag=false;
-                 break;
-              }    
-            } 
-         }
-        else
-        {
-           if(stk.size()!=0 && stk[stk.size()-1]=='|')
-             stk.pop_back();
-           else stk.pb('|');    
-        } 
-    }
-    if(flag==true && stk.size()==0)cout<<"YES\n";
-    else cout<<"NO\n";
-  }
-  return 0; 	
+	stack<char> s;
+	s.push('0'); 
+	vi count(5,0);
+	vi check(5,0);
+	fi(a.length())
+	{
+		switch(a[i])
+		{
+			case '(':
+				s.push('(');
+				count[0]++;
+			break;
+			case '{':
+				s.push('{');
+				count[1]++;
+			break;
+			case '[':
+				s.push('[');
+				count[2]++;
+			break;
+			case '<':
+				s.push('<');
+				count[3]++;
+			break;
+			case '|':          //edit this please but later
+				if(s.top()=='|')
+					{s.pop();
+					count[4]--;}
+				else
+					{s.push('|');
+					count[4]++;}									
+			break;
+			case ')':
+				if(s.top()=='(')
+					{s.pop();
+					count[0]--;}
+				else
+					{return false;}
+			break;
+			case '}':
+				if(s.top()=='{')
+					{s.pop();
+					count[1]--;}
+				else
+					{return false;}
+			break;
+			case ']':
+				if(s.top()=='[')
+					{s.pop();
+					count[2]--;}
+				else
+					{return false;}
+			break;
+			case '>':
+				if(s.top()=='<')
+					{s.pop();
+					count[3]--;}
+				else
+					{return false;}
+			break;						
+		}
+	}
+	if(count!=check||s.top()!='0')
+		return false;
+ 	return true;
+}
+  
+int main () 
+{ /*
+    stack <int> s; 
+    s.push(10); 
+    s.push(30); 
+    s.push(20); 
+    s.push(5); 
+    s.push(1); 
+  
+    cout << "The stack is : "; 
+    showstack(s); 
+  
+    cout << "\ns.size() : " << s.size(); 
+    cout << "\ns.top() : " << s.top(); 
+  
+  
+    cout << "\ns.pop() : "; 
+    s.pop(); 
+    showstack(s); 
+  */
+	lli q ;
+	cin>> q;
+	string s;
+	while(q--)
+	{
+		cin>>s;
+		bool check1 = true ;
+		fi(s.length())
+		{
+			if(s[i]=='('||s[i]=='{'||s[i]=='['||s[i]=='<'||s[i]=='>'||s[i]==']'||s[i]=='}'||s[i]==')'||s[i]=='|')
+				{continue;}
+			else{
+				check1 = false;
+				break;
+			}
+		}
+		if(!check1)
+		{
+			cout<<"NO";
+			continue;
+		}
+		if(ParanthesisBalanced(s))
+		{
+			cout<<"YES";line
+		}
+		else{
+			cout<<"NO";line
+		}
+	}
+
+	
+	
+    return 0; 
 }
